@@ -1,0 +1,15 @@
+grid_mode: false
+height: 87
+malfunction_max_duration: 50
+malfunction_min_duration: 20
+malfunction_rate: 250
+max_num_cities: 42
+max_rails_between_cities: 2
+max_rails_in_city: 4
+number_of_agents: 406
+regenerate_rail_on_reset: true
+regenerate_schedule_on_reset: true
+seed: 0
+speed_ratio_map:
+  1.0: 1.0
+width: 87

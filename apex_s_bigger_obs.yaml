@@ -1,0 +1,77 @@
+flatland-apex-3-layer:
+    run: APEX
+    env: flatland_sparse
+    stop:
+        training_iteration: 2000 # 1e8
+    checkpoint_freq: 10
+    checkpoint_at_end: True
+    # keep_checkpoints_num: 7
+    checkpoint_score_attr: episode_reward_mean
+    config:
+        framework: tf
+        num_workers: 2
+        num_envs_per_worker: 1
+
+        num_gpus: 0
+        exploration_config:
+            type: PerWorkerEpsilonGreedy
+            epsilon_timesteps: 15000
+            final_epsilon: 0.02
+            initial_epsilon: 1
+
+        hiddens: []
+        dueling: True
+
+        train_batch_size: 64
+
+        env_config:
+            # skip_no_choice_cells: True
+            observation: graphobs
+            available_actions_obs: True
+            # to get original action masking based on the rails set deadlock masking to False
+            # if this is set to True set mask_in_state to False
+            potential_deadlock_masking: False
+            allow_noop: False
+
+            reward_shaping: True
+            rewards:
+                deadlock_avoidance_reward: -0.15
+                deadlock_reward: -5
+                deadlock_unusable_switch_avoidance: 0.1
+                dont_move_reward: -1.5
+                finished_reward: 6
+                invalid_action_reward: 0
+                not_finished_reward: -1
+                step_reward: -1
+                step_second_shortest_path: 0
+                step_shortest_path: 0
+                stop_on_switch_reward: -2
+                stop_potential_deadlock_reward: 0
+                priority_reward: 0.5
+                priority_reward_shortest_path: -0.3
+                priority_reward_alternative_path: -0.35
+                priority_penalty: -1.25
+                priority_no_path_penalty: -4
+            # render: human
+            # For saving videos in custom folder and to wandb.
+            # By default if not specified folder is flatland
+            video_dir: apex_graph_videos
+
+            generator: sparse_rail_generator
+            generator_config: [test_case_1]
+            #generator_config: [test_case_1, test_case_2, test_case_3, test_case_4, test_case_5, test_case_6, test_case_11,test_case_12,test_case_13,test_case_14,test_case_15,test_case_16,test_case_17, test_case_20, test_case_25]
+
+            wandb:
+                project: flatland_apex
+                entity: toli
+                tags: ["3 layer model"]
+        model:
+            custom_model: fully_connected_model
+            custom_model_config:
+                layers: [512, 512, 512]
+                activation: relu
+                layer_norm: False
+                #vf_share_layers: True  # False
+                mask_unavailable_actions: True
+                mask_in_state: True
+

@@ -1,0 +1,10 @@
+evaluation_num_workers: 2
+# Enable evaluation, once per training iteration.
+evaluation_interval: 50
+# Run 1 episode each time evaluation runs.
+evaluation_num_episodes: 50
+# Override the env config for evaluation.
+evaluation_config:
+   explore: False
+   env_config:
+       seed: 100
